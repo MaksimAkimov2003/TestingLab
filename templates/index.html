@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number of Islands</title>
+</head>
+<body>
+    <h1>Number of Islands</h1>
+    <form id="islands-form">
+        <label for="grid">Grid (comma-separated rows and columns of '0' and '1'):</label><br>
+        <textarea id="grid" name="grid" rows="10" cols="30"></textarea><br>
+        <input type="submit" value="Submit">
+    </form>
+    <p id="result"></p>
+    <script>
+        document.getElementById('islands-form').onsubmit = function(event) {
+            event.preventDefault();
+            const gridInput = document.getElementById('grid').value;
+            const grid = gridInput.split('\n').map(row => row.split(','));
+            fetch('/num_islands', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({grid: grid}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').textContent = 'Number of islands: ' + data.num_islands;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
